@@ -15,6 +15,8 @@ console.log("Hiii")
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/upload", require("./routes/uploadRoutes"));
 app.use("/api/profile", require("./routes/profileRoutes"));
+app.use("/api/jobs", require("./routes/jobRoutes"));
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

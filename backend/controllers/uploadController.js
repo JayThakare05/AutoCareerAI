@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const axios = require("axios");
 
 // Upload Resume
 exports.uploadResume = async (req, res) => {
@@ -19,13 +20,31 @@ exports.uploadCertificates = async (req, res) => {
   try {
     const user = await User.findById(req.user);
 
-    const files = req.files.map(file => file.path);
+    const files = req.files.map(f => f.path);
     user.certificates.push(...files);
     await user.save();
 
-    res.json({ message: "Certificates uploaded successfully" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    // 🔥 Call AI service for each certificate
+    let extractedSkills = new Set(user.extractedSkills || []);
+
+    for (let file of files) {
+      const aiRes = await axios.post("http://localhost:8001/extract-skills", {
+        file_path: file
+      });
+
+      aiRes.data.skills.forEach(s => extractedSkills.add(s));
+    }
+
+    user.extractedSkills = Array.from(extractedSkills);
+    await user.save();
+
+    res.json({
+      message: "Certificates uploaded & skills extracted",
+      skills: user.extractedSkills
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
 

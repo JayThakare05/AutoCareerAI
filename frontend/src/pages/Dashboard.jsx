@@ -77,6 +77,11 @@ export default function Dashboard() {
               desc="Edit your personal details"
               onClick={() => navigate("/profile")}
             />
+            <ActionCard
+                title="Recommended Jobs"
+                desc="AI-matched jobs for you"
+                onClick={() => navigate("/jobs")}
+                />
           </div>
         </div>
 
