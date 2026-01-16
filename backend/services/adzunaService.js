@@ -7,7 +7,7 @@ const COUNTRY = "in";
 exports.fetchJobs = async (query) => {
   try {
     const url = `https://api.adzuna.com/v1/api/jobs/${COUNTRY}/search/20`;
-    console.log("hii")
+    console.log(query)
     const res = await axios.get(url, {
       params: {
         app_id: APP_ID,

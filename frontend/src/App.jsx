@@ -6,7 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import Documents from "./pages/Documents";
 import Profile from "./pages/Profile";
 import Jobs from "./pages/Jobs";
-
+import ResumeAnalyzer from "./pages/ResumeAnalyzer";
 function App() {
   return (
     <BrowserRouter>
@@ -18,6 +18,7 @@ function App() {
         <Route path="/documents" element={<Documents />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/jobs" element={<Jobs />} />
+        <Route path="/resume-analyzer" element={<ResumeAnalyzer/>}/>
       </Routes>
     </BrowserRouter>
   );

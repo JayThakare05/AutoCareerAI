@@ -1,110 +1,73 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react"; 
+import { useNavigate } from "react-router-dom"; 
+import Sidebar from "./components/Sidebar"; 
+import Topbar from "./components/Topbar"; 
+import JobCard from "./components/JobCard"; 
 import API from "../api/api";
-
-export default function Dashboard() {
+export default function Dashboard({ children, title }) {
   const [user, setUser] = useState(null);
+  const [jobs, setJobs] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     API.get("/profile").then(res => setUser(res.data));
+    API.get("/jobs/recommended", {
+      params: {
+        data: "skills",
+        source: "dashboard"
+      }
+    }).then(res => setJobs(res.data.jobs || []));
   }, []);
 
-  if (!user) return <p className="text-center mt-10">Loading...</p>;
-
-  const profileCompletion = () => {
-    let filled = 0;
-    const fields = ["name", "college", "qualification", "address", "resumePath"];
-    fields.forEach(f => user[f] && filled++);
-    return Math.round((filled / fields.length) * 100);
-  };
+  if (!user) {
+    return (
+      <div className="h-screen flex items-center justify-center text-gray-500">
+        Loading dashboard...
+      </div>
+    );
+  }
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen">
-      <div className="max-w-6xl mx-auto">
+    <div className="flex h-screen bg-gray-50 overflow-hidden">
 
-        {/* Header */}
-        <div className="bg-white p-6 rounded shadow mb-6">
-          <h1 className="text-2xl font-bold">Welcome, {user.name} 👋</h1>
-          <p className="text-sm text-gray-600">
-            Profile Completion: {profileCompletion()}%
-          </p>
-          <div className="w-full bg-gray-200 rounded h-2 mt-2">
-            <div
-              className="bg-blue-600 h-2 rounded"
-              style={{ width: `${profileCompletion()}%` }}
-            />
-          </div>
+      <Sidebar navigate={navigate} />
+
+      <div className="flex-1 flex flex-col">
+
+        <div className="sticky top-0 z-20 bg-white border-b">
+          <Topbar user={user} navigate={navigate} />
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <StatCard title="Resume"
-            value={user.resumePath ? "Uploaded" : "Missing"}
-            color="blue"
-          />
-          <StatCard title="Certificates"
-            value={user.certificates?.length || 0}
-            color="green"
-          />
-          <StatCard title="Skills"
-            value={user.extractedSkills?.length || 0}
-            color="purple"
-          />
-          <StatCard title="Jobs"
-            value="Coming Soon"
-            color="orange"
-          />
+        {/* HEADER (NO SCROLL) */}
+        <div className="px-8 pt-6 pb-4 bg-gray-50 shrink-0">
+          <h2 className="text-2xl font-bold text-gray-900">
+            {title || "Jobs recommended for you 🚀"}
+          </h2>
         </div>
 
-        {/* Quick Actions */}
-        <div className="bg-white p-6 rounded shadow">
-          <h2 className="text-xl font-bold mb-4">Quick Actions</h2>
+        {/* ✅ ONLY SCROLL AREA */}
+        <div className="flex-1 overflow-y-auto px-8 pb-8">
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <ActionCard
-              title="Upload Documents"
-              desc="Add resume & certificates"
-              onClick={() => navigate("/upload")}
-            />
-            <ActionCard
-              title="View Documents"
-              desc="Preview & download files"
-              onClick={() => navigate("/documents")}
-            />
-            <ActionCard
-              title="My Profile"
-              desc="Edit your personal details"
-              onClick={() => navigate("/profile")}
-            />
-            <ActionCard
-                title="Recommended Jobs"
-                desc="AI-matched jobs for you"
-                onClick={() => navigate("/jobs")}
-                />
-          </div>
+          {/* ✅ CHILD CONTENT (Extracted skills page etc.) */}
+          {children}
+
+          {/* ✅ DEFAULT DASHBOARD JOBS */}
+          {!children && (
+            jobs.length === 0 ? (
+              <div className="mt-12 text-center text-gray-500">
+                No jobs found yet. Complete your profile.
+              </div>
+            ) : (
+              <div className="max-w-3xl mx-auto space-y-5 mt-4">
+                {jobs.map((job, index) => (
+                  <JobCard key={index} job={job} />
+                ))}
+              </div>
+            )
+          )}
+
         </div>
-
       </div>
     </div>
   );
 }
-
-/* ---- Components ---- */
-
-const StatCard = ({ title, value, color }) => (
-  <div className="bg-white p-4 rounded shadow text-center">
-    <p className={`text-${color}-600 font-semibold`}>{title}</p>
-    <p className="text-xl font-bold mt-2">{value}</p>
-  </div>
-);
-
-const ActionCard = ({ title, desc, onClick }) => (
-  <div
-    onClick={onClick}
-    className="border rounded p-4 cursor-pointer hover:bg-gray-100 transition"
-  >
-    <h3 className="font-semibold">{title}</h3>
-    <p className="text-sm text-gray-600">{desc}</p>
-  </div>
-);

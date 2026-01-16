@@ -1,6 +1,6 @@
 import { useState } from "react";
 import API from "../api/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -13,29 +13,70 @@ export default function Login() {
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
     } catch (err) {
-      alert("Login failed");
+      alert("Invalid email or password");
     }
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-6 rounded shadow w-96">
-        <h2 className="text-2xl font-bold mb-4">Login</h2>
-        <input className="w-full p-2 border mb-3" placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" className="w-full p-2 border mb-3" placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)} />
-        <button onClick={handleLogin}
-          className="w-full bg-blue-600 text-white py-2 rounded">
-          Login
-        </button>
-        <p className="mt-4 text-sm text-center">
-            Not registered?{" "}
-            <a href="/register" className="text-blue-600 font-semibold">
-                Register
-            </a>
-            </p>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 relative">
 
+      {/* Logo */}
+      <div className="absolute top-6 left-6 text-white text-2xl font-extrabold tracking-wide">
+        AutoCareer<span className="text-pink-300">AI</span>
+      </div>
+
+      {/* Center Card */}
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="backdrop-blur-lg bg-white/20 border border-white/30
+                        p-8 rounded-2xl shadow-2xl w-[380px] text-white">
+
+          <h2 className="text-3xl font-bold mb-2 text-center">
+            Welcome Back 👋
+          </h2>
+          <p className="text-sm text-center text-white/80 mb-6">
+            Login to continue your career journey
+          </p>
+
+          {/* Email */}
+          <input
+            className="w-full p-3 mb-4 rounded-xl bg-white/90 text-black
+                       focus:outline-none focus:ring-2 focus:ring-pink-400"
+            placeholder="Email address"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          {/* Password */}
+          <input
+            type="password"
+            className="w-full p-3 mb-5 rounded-xl bg-white/90 text-black
+                       focus:outline-none focus:ring-2 focus:ring-pink-400"
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          {/* Login Button */}
+          <button
+            onClick={handleLogin}
+            className="w-full py-3 rounded-xl font-semibold text-white
+                       bg-gradient-to-r from-pink-500 to-purple-500
+                       hover:scale-[1.02] hover:shadow-lg
+                       transition-all duration-200"
+          >
+            Login →
+          </button>
+
+          {/* Register */}
+          <p className="mt-6 text-sm text-center text-white/80">
+            New here?{" "}
+            <Link
+              to="/register"
+              className="text-pink-300 font-semibold hover:underline"
+            >
+              Create an account
+            </Link>
+          </p>
+
+        </div>
       </div>
     </div>
   );

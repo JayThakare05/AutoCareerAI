@@ -20,7 +20,7 @@ exports.updateProfile = async (req, res) => {
 // Upload profile photo
 exports.uploadProfilePhoto = async (req, res) => {
   const user = await User.findById(req.user);
-  user.profilePhoto = req.file.path;
+  user.documents.profilePhoto = req.file.path;
   await user.save();
 
   res.json({ message: "Profile photo updated" });

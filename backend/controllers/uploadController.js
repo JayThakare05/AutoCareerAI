@@ -6,7 +6,7 @@ exports.uploadResume = async (req, res) => {
   try {
     const user = await User.findById(req.user);
 
-    user.resumePath = req.file.path;
+    user.documents.resume = req.file.path;
     await user.save();
 
     res.json({ message: "Resume uploaded successfully" });
@@ -19,11 +19,15 @@ exports.uploadResume = async (req, res) => {
 exports.uploadCertificates = async (req, res) => {
   try {
     const user = await User.findById(req.user);
-
+    console.log("here");
     const files = req.files.map(f => f.path);
-    user.certificates.push(...files);
-    await user.save();
+    user.documents = user.documents || {};
+    user.documents.certificates = user.documents.certificates || [];
+    user.documents.certificates.push(...files);
 
+
+    await user.save();
+    
     // 🔥 Call AI service for each certificate
     let extractedSkills = new Set(user.extractedSkills || []);
 
