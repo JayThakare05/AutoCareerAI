@@ -25,3 +25,5 @@ exports.uploadProfilePhoto = async (req, res) => {
 
   res.json({ message: "Profile photo updated" });
 };
+
+

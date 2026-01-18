@@ -3,45 +3,69 @@ const { fetchJobs } = require("../services/adzunaService");
 
 exports.getRecommendedJobs = async (req, res) => {
   try {
-    console.log("hiii")
-     const { data } = req.query;
-    console.log(data);
-    const user = await User.findById(req.user);
-    console.log(user[data])
-     console.log("User",user[data]);
-    if (!user[data] || user[data].length === 0) {
-      return res.json({ jobs: [], message: "No skills found yet" });
+    const { data } = req.query; // skills source
+
+    // ✅ Allow only specific fields
+    const allowedFields = ["skills", "extractedSkills"];
+    if (!allowedFields.includes(data)) {
+      return res.status(400).json({ error: "Invalid skill source" });
     }
-   
-    // 🔥 Build search query from top skills
-    const searchQuery = user[data].slice(0, 5).join(" ");
-    // console.log("SQ",searchQuery)
+
+    const user = await User.findById(req.user);
+
+    const skills = user[data] || [];
+
+    if (skills.length === 0) {
+      return res.json({
+        jobs: [],
+        message: "No skills found yet"
+      });
+    }
+
+    // 🔍 Build search query
+    const searchQuery = skills.slice(0, 5).join(" ");
+
     const jobs = await fetchJobs(searchQuery);
-     console.log("jobs")
+
     const rankedJobs = jobs.map(job => {
-      const text = (
-        job.title + " " +
-        job.description
-      ).toLowerCase();
-      let matchCount = 0;
-      user[data].forEach(skill => {
-        if (text.includes(skill.toLowerCase())) matchCount++;
+      const title = job.title || "";
+      const description = job.description || "";
+
+      const text = (title + " " + description).toLowerCase();
+
+      const matchedSkills = [];
+      const missingSkills = [];
+
+      skills.forEach(skill => {
+        if (text.includes(skill.toLowerCase())) {
+          matchedSkills.push(skill);
+        } else {
+          missingSkills.push(skill);
+        }
       });
 
+      const matchScore = Math.round(
+        (matchedSkills.length / skills.length) * 100
+      );
+
       return {
-        title: job.title,
-        company: job.company?.display_name,
-        location: job.location?.display_name,
+        title,
+        company: job.company?.display_name || "Unknown",
+        location: job.location?.display_name || "Remote",
         url: job.redirect_url,
-        description: job.description,
-        matchScore: Math.round((matchCount / user[data].length) * 100)
+        description,
+        matchScore,
+        matchedSkills,
+        missingSkills: missingSkills.slice(0, 5) // 👈 limit for UI
       };
     });
+
     rankedJobs.sort((a, b) => b.matchScore - a.matchScore);
-    
+
     res.json({ jobs: rankedJobs });
 
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch jobs" });
   }
 };

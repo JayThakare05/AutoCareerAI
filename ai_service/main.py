@@ -12,7 +12,7 @@ from skill_extractor.extractor import extract_skills_with_llm
 # ---------- NEW IMPORTS ----------
 from utils.resume_parser import extract_text_from_pdf
 from utils.llm_analyzer import analyze_resume
-
+from utils.project_recommender import recommend_project
 app = FastAPI(title="AutoCareerAI – Unified AI Service")
 
 # ---------- MODELS ----------
@@ -22,6 +22,12 @@ class CertificateRequest(BaseModel):
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
+class ProjectChatRequest(BaseModel):
+    projects: list
+    message: str
+
+UPLOAD_DIR = "uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 # =====================================================
 # 1️⃣ CERTIFICATE → SKILL EXTRACTION (EXISTING)
 # =====================================================
@@ -59,6 +65,15 @@ async def resume_analyze(
     result = await run_in_threadpool(
         analyze_resume, resume_text, jobRole
     )
-    print(type(result))
+    print(result)
 
     return result
+
+@app.post("/project-recommend")
+async def project_recommend(req: ProjectChatRequest):
+    reply = await run_in_threadpool(
+        recommend_project,
+        req.projects,
+        req.message
+    )
+    return reply

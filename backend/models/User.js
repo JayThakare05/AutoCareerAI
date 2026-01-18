@@ -1,5 +1,17 @@
 const mongoose = require("mongoose");
 
+
+const ProjectSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    techStack: [String],
+    githubUrl: String,
+    deployedUrl: String
+  },
+  { timestamps: true }
+);
+
 const qualificationSchema = new mongoose.Schema(
   {
     tenth: {
@@ -72,7 +84,7 @@ const UserSchema = new mongoose.Schema(
       resume: String,
       certificates: [String],
     },
-
+    projects: [ProjectSchema],
     role: { type: String, default: "user" },
   },
   { timestamps: true }

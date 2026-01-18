@@ -1,39 +1,34 @@
-import subprocess
 import json
 import re
+from langchain_ollama import OllamaLLM
 
-def extract_skills_with_llm(text):
+llm = OllamaLLM(
+    model="llama3",
+    temperature=0
+)
+
+def extract_skills_with_llm(text: str) -> list[str]:
     prompt = f"""
 You are an AI system that extracts professional skills.
 
 Rules:
 - Extract ONLY skills
-- Return ONLY JSON array
-- No explanation
+- Return ONLY a valid JSON array
+- No explanation, no markdown
 
 Text:
 {text}
 """
 
-    result = subprocess.run(
-        ["ollama", "run", "llama3", prompt],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,   # ⛔ ignore ANSI noise
-        encoding="utf-8",
-        errors="ignore"
-    )
+    response = llm.invoke(prompt).strip()
 
-    output = result.stdout.strip()
-    print("RAW OUTPUT:\n", output)
-
-    # ✅ Extract JSON array only
-    match = re.search(r"\[.*?\]", output, re.DOTALL)
-
+    # Extract JSON array safely
+    match = re.search(r"\[.*?\]", response, re.DOTALL)
     if not match:
         return []
 
     try:
         skills = json.loads(match.group())
-        return list(set(skills))
+        return sorted(set(map(str.strip, skills)))
     except json.JSONDecodeError:
         return []

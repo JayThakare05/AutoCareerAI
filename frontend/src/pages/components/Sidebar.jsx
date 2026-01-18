@@ -36,6 +36,10 @@ const Sidebar = ({ navigate }) => (
         label="Saved Jobs"
         onClick={() => navigate("/saved-jobs")}
       />
+      <SidebarItem
+        label="Recommend Project "
+        onClick={() => navigate("/project-recommend")}
+      />
     </nav>
 
     {/* FOOTER (OPTIONAL FUTURE USE) */}

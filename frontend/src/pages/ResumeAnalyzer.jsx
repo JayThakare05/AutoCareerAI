@@ -1,13 +1,17 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import DashboardLayout from "./Dashboard";
 import API from "../api/api";
 import AnalysisCard from "./components/AnalysisCard";
-
+import SkillPieChart from "./components/charts/SkillPieChart";
+import SkillMatrix from "./components/charts/SkillMatrix";
 export default function ResumeAnalyzer() {
   const [resume, setResume] = useState(null);
   const [jobRole, setJobRole] = useState("");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const analyzeResume = async () => {
     if (!resume || !jobRole)
@@ -62,30 +66,74 @@ export default function ResumeAnalyzer() {
           onChange={(e) => setJobRole(e.target.value)}
           className="w-full px-4 py-3 border rounded-lg mb-4"
         />
+        <div className="flex justify-between items-center">
+          <button
+            onClick={analyzeResume}
+            className="bg-purple-600 text-white px-6 py-2 rounded-lg
+                      hover:bg-purple-700"
+          >
+            {loading ? "Analyzing..." : "Analyze Resume"}
+          </button>
 
-        <button
-          onClick={analyzeResume}
-          className="bg-purple-600 text-white px-6 py-2 rounded-lg
-                     hover:bg-purple-700"
-        >
-          {loading ? "Analyzing..." : "Analyze Resume"}
-        </button>
+          <button
+            onClick={() => navigate("/resume-history")}
+            className="text-sm text-purple-600 font-semibold
+                      hover:underline"
+          >
+            View Resume History →
+          </button>
+</div>
+
+
       </div>
 
-      {/* RESULT */}
+      {result && typeof result.atsScore === "number" && (
+        <div className="bg-white rounded-xl shadow p-6 mb-6 text-center">
+          <p className="text-sm text-gray-500">ATS Score</p>
+          <p
+            className={`text-4xl font-bold mt-2 ${
+              result.atsScore >= 75
+                ? "text-green-600"
+                : result.atsScore >= 50
+                ? "text-yellow-500"
+                : "text-red-500"
+            }`}
+          >
+            {result.atsScore}/100
+          </p>
+        </div>
+      )}
+{/* RESULT */}
       {result && (
   <div className="space-y-4">
     {result.summary && (
       <AnalysisCard title="Resume Summary" content={result.summary} />
     )}
 
-    {result.skills?.length > 0 && (
+      {result && (
+  <SkillPieChart
+    skills={result.skills || []}
+    missingSkills={result.missingSkills || []}
+  />
+  
+)}
+      {result && (
+        <SkillMatrix
+          skills={result.skills || []}
+          missingSkills={result.missingSkills || []}
+        />
+        
+      )}
+
+      
+
+    {/* {result.skills?.length > 0 && (
       <AnalysisCard title="Detected Skills" list={result.skills} />
     )}
 
     {result.missingSkills?.length > 0 && (
       <AnalysisCard title="Missing Skills" list={result.missingSkills} />
-    )}
+    )} */}
 
     {result.suggestions?.length > 0 && (
       <AnalysisCard title="Suggestions" list={result.suggestions} />
