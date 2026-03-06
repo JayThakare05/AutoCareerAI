@@ -6,7 +6,6 @@ llm = OllamaLLM(
     model="llama3",
     temperature=0
 )
-
 def extract_skills_with_llm(text: str) -> list[str]:
     prompt = f"""
 You are an AI system that extracts professional skills.

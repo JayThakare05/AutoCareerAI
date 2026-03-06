@@ -31,7 +31,7 @@ exports.projectChat = async (req, res) => {
         message: userMessage
       }
     );
-    console.log("Data",aiResponse);
+    console.log("Data",aiResponse.data);
     res.json({
       reply: aiResponse.data
     });

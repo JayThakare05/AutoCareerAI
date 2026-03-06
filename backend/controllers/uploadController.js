@@ -11,7 +11,6 @@ exports.uploadResume = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: "No resume file provided" });
     }
-    console.log("why")
     /* ---------- DELETE OLD RESUME IF EXISTS ---------- */
     if (user.documents?.resume) {
       try {
@@ -22,7 +21,6 @@ exports.uploadResume = async (req, res) => {
         console.warn("Old resume delete failed:", err.message);
       }
     }
-    console.log("why1")
 
     /* ---------- SAVE NEW RESUME PATH ---------- */
     user.documents = user.documents || {};
@@ -50,7 +48,7 @@ exports.deleteResume = async (req, res) => {
 
   try {
     fs.unlinkSync(path.join(__dirname, "..", user.documents.resume));
-  } catch {}
+  } catch { }
 
   user.documents.resume = null;
   await user.save();
@@ -61,7 +59,6 @@ exports.deleteResume = async (req, res) => {
 exports.uploadCertificates = async (req, res) => {
   try {
     const user = await User.findById(req.user);
-    console.log("here");
     const files = req.files.map(f => f.path);
     user.documents = user.documents || {};
     user.documents.certificates = user.documents.certificates || [];
@@ -69,7 +66,7 @@ exports.uploadCertificates = async (req, res) => {
 
 
     await user.save();
-    
+
     // 🔥 Call AI service for each certificate
     let extractedSkills = new Set(user.extractedSkills || []);
 
@@ -102,7 +99,7 @@ exports.deleteCertificate = async (req, res) => {
 
   try {
     fs.unlinkSync(path.join(__dirname, "..", certPath));
-  } catch {}
+  } catch { }
 
   user.documents.certificates.splice(index, 1);
   await user.save();
@@ -111,7 +108,6 @@ exports.deleteCertificate = async (req, res) => {
 };
 exports.getUploadedDocs = async (req, res) => {
   try {
-    console.log("docs")
     const user = await User.findById(req.user)
       .select("documents extractedSkills");
 

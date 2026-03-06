@@ -2,11 +2,132 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ── Base ── */
+*,
+*::before,
+*::after {
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+}
+
+/* smooth theme transitions — only color-related props */
+*,
+*::before,
+*::after {
+  transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+  transition-duration: 180ms;
+  transition-timing-function: ease;
+}
+
+/* Don't transition animations themselves */
+.no-transition {
+  transition: none !important;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3b82f6;
+  border-radius: 99px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #00b4ff;
+}
+
+/* ── Stagger children ── */
+.stagger>*:nth-child(1) {
+  animation-delay: 0ms;
+  animation-fill-mode: both;
+}
+
+.stagger>*:nth-child(2) {
+  animation-delay: 55ms;
+  animation-fill-mode: both;
+}
+
+.stagger>*:nth-child(3) {
+  animation-delay: 110ms;
+  animation-fill-mode: both;
+}
+
+.stagger>*:nth-child(4) {
+  animation-delay: 165ms;
+  animation-fill-mode: both;
+}
+
+.stagger>*:nth-child(5) {
+  animation-delay: 220ms;
+  animation-fill-mode: both;
+}
+
+.stagger>*:nth-child(6) {
+  animation-delay: 275ms;
+  animation-fill-mode: both;
+}
+
+.stagger>*:nth-child(7) {
+  animation-delay: 330ms;
+  animation-fill-mode: both;
+}
+
+/* ── Glow helpers ── */
+.glow-electric {
+  box-shadow: 0 0 18px rgba(0, 180, 255, 0.35);
+}
+
+.glow-electric:hover {
+  box-shadow: 0 0 32px rgba(0, 180, 255, 0.55);
+}
+
+/* ── Gradient text ── */
+.text-gradient-blue {
+  background: linear-gradient(135deg, #00b4ff 0%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Shimmer loading ── */
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+}
+
+.dark .shimmer {
+  background: linear-gradient(90deg, transparent, rgba(0, 180, 255, 0.05), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+}
+
+/* ── Legacy alias (kept for Register page) ── */
 @keyframes slideFade {
   from {
     opacity: 0;
     transform: translateX(20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -14,6 +135,5 @@
 }
 
 .animate-slide {
-  animation: slideFade 0.4s ease-in-out;
+  animation: slideFade 0.4s ease-in-out both;
 }
-

@@ -3,13 +3,13 @@ const multer = require("multer");
 const axios = require("axios");
 const fs = require("fs");
 const FormData = require("form-data");
-const ResumeAnalysis =require("../models/ResumeAnalysis");
+const ResumeAnalysis = require("../models/ResumeAnalysis");
 const auth = require("../middleware/authMiddleware");
 const router = express.Router();
 const upload = multer({ dest: "temp/" });
 
 router.post(
-  "/resume-analyze",auth,
+  "/resume-analyze", auth,
   upload.single("resume"),
   async (req, res) => {
     try {
@@ -30,14 +30,13 @@ router.post(
         }
       );
       await ResumeAnalysis.create({
-  userId: req.user,
-  jobRole: req.body.jobRole,
-  atsScore: aiRes.data.atsScore,
-  skills: aiRes.data.skills,
-  missingSkills: aiRes.data.missingSkills,
-  suggestions: aiRes.data.suggestions
-});
-      console.log(typeof aiRes.data)
+        userId: req.user,
+        jobRole: req.body.jobRole,
+        atsScore: aiRes.data.atsScore,
+        skills: aiRes.data.skills,
+        missingSkills: aiRes.data.missingSkills,
+        suggestions: aiRes.data.suggestions
+      });
       // ✅ delete temp file
       fs.unlinkSync(req.file.path);
 

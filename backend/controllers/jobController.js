@@ -23,7 +23,7 @@ exports.getRecommendedJobs = async (req, res) => {
     }
 
     // 🔍 Build search query
-    const searchQuery = skills.slice(0, 5).join(" ");
+    const searchQuery = skills.slice(0, 5).join(" OR ");
 
     const jobs = await fetchJobs(searchQuery);
 

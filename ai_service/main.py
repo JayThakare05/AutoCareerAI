@@ -25,9 +25,6 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 class ProjectChatRequest(BaseModel):
     projects: list
     message: str
-
-UPLOAD_DIR = "uploads"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
 # =====================================================
 # 1️⃣ CERTIFICATE → SKILL EXTRACTION (EXISTING)
 # =====================================================
@@ -65,7 +62,7 @@ async def resume_analyze(
     result = await run_in_threadpool(
         analyze_resume, resume_text, jobRole
     )
-    print(result)
+    # print(result)
 
     return result
 
@@ -76,4 +73,5 @@ async def project_recommend(req: ProjectChatRequest):
         req.projects,
         req.message
     )
+    print(reply)
     return reply

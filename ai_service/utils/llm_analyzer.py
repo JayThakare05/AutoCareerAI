@@ -30,5 +30,7 @@ def analyze_resume(resume_text, job_role):
 
     prompt = resume_analysis_prompt(resume_text, job_role)
     response = llm.invoke(prompt)
+    #print(response)
     result = llm_output_to_dict(response)
+    #print(result)
     return result
