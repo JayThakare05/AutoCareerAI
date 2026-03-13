@@ -6,6 +6,8 @@ import {
   Github, Globe, ArrowLeft, Layers, Zap,
   Upload, CheckCircle
 } from "lucide-react";
+import toast from "react-hot-toast";
+import ConfirmModal from "./components/ConfirmModal";
 
 /* ---------- HELPERS ---------- */
 const isImage = (path) => /\.(jpg|jpeg|png)$/i.test(path);
@@ -13,18 +15,23 @@ const isPDF = (path) => /\.pdf$/i.test(path);
 
 const openFile = async (path) => {
   if (!path) return;
+  const loadingToast = toast.loading("Fetching document from secure vault...");
   try {
     const token = localStorage.getItem("token");
     const res = await fetch(
       `http://localhost:5000/api/upload/file?filePath=${encodeURIComponent(path)}`,
       { headers: { Authorization: token } }
     );
-    if (!res.ok) return alert("Authorization failed");
+    if (!res.ok) {
+        toast.error("Authorization failed. Session might be expired.", { id: loadingToast });
+        return;
+    }
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
+    toast.success("Document opened", { id: loadingToast });
   } catch {
-    alert("Unable to open file");
+    toast.error("Unable to retrieve file from storage", { id: loadingToast });
   }
 };
 
@@ -155,6 +162,7 @@ export default function Documents() {
   const [resumeFile, setResumeFile] = useState(null);
   const [certFiles, setCertFiles] = useState([]);
   const [loading, setLoading] = useState({ resume: false, certs: false, project: false });
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, type: "", data: null });
 
   const [newProject, setNewProject] = useState({
     title: "",
@@ -170,26 +178,28 @@ export default function Documents() {
   }, []);
 
   const updateResume = async () => {
-    if (!resumeFile) return alert("Select a resume");
+    if (!resumeFile) return toast.error("Please select a resume file");
     setLoading(prev => ({ ...prev, resume: true }));
+    const loadingToast = toast.loading("Updating primary resume...");
     try {
       const fd = new FormData();
       fd.append("resume", resumeFile);
       await API.post("/upload/resume", fd);
-      alert("Resume uploaded successfully");
+      toast.success("Master resume updated", { id: loadingToast });
       const res = await API.get("/upload/my-documents");
       setDocs(res.data);
       setResumeFile(null);
     } catch {
-      alert("Failed to upload resume");
+      toast.error("Resume update failed", { id: loadingToast });
     } finally {
       setLoading(prev => ({ ...prev, resume: false }));
     }
   };
 
   const addCertificates = async () => {
-    if (certFiles.length === 0) return alert("Select certificates");
+    if (certFiles.length === 0) return toast.error("Select certificate files for synchronization");
     setLoading(prev => ({ ...prev, certs: true }));
+    const loadingToast = toast.loading("Committing certificate data to index...");
     try {
       const fd = new FormData();
       for (let f of certFiles) fd.append("certificates", f);
@@ -197,25 +207,39 @@ export default function Documents() {
       const res = await API.get("/upload/my-documents");
       setDocs(res.data);
       setCertFiles([]);
-      alert("Certificates synced successfully");
+      toast.success("Certificates indexed successfully", { id: loadingToast });
+    } catch {
+      toast.error("Certificate synchronization failed", { id: loadingToast });
     } finally {
       setLoading(prev => ({ ...prev, certs: false }));
     }
   };
 
-  const deleteCertificate = async (index) => {
-    await API.delete(`/upload/certificates/${index}`);
-    setDocs(prev => ({
-      ...prev,
-      certificates: prev.certificates.filter((_, i) => i !== index)
-    }));
+  const deleteCertificate = (index) => {
+    setConfirmModal({ isOpen: true, type: "certificate", data: index });
+  };
+
+  const handleConfirmCertDelete = async () => {
+    const index = confirmModal.data;
+    const loadingToast = toast.loading("Purging certificate record...");
+    try {
+        await API.delete(`/upload/certificates/${index}`);
+        setDocs(prev => ({
+          ...prev,
+          certificates: prev.certificates.filter((_, i) => i !== index)
+        }));
+        toast.success("Record purged", { id: loadingToast });
+    } catch {
+        toast.error("Purge failed. Index might be locked.", { id: loadingToast });
+    }
   };
 
   const addProject = async () => {
     if (!newProject.title || !newProject.description)
-      return alert("Title & description required");
+      return toast.error("Title and description are mandatory for project indexing");
 
     setLoading(prev => ({ ...prev, project: true }));
+    const loadingToast = toast.loading("Indexing new engineering project...");
     try {
       const payload = {
         ...newProject,
@@ -224,15 +248,24 @@ export default function Documents() {
       const res = await API.post("/profile/projects", payload);
       setProjects(prev => [...prev, res.data.project]);
       setNewProject({ title: "", description: "", techStack: "", githubUrl: "", deployedUrl: "" });
-      alert("Project added to index");
+      toast.success("Project indexed successfully", { id: loadingToast });
+    } catch {
+      toast.error("Project indexing failed. Check network link.", { id: loadingToast });
     } finally {
       setLoading(prev => ({ ...prev, project: false }));
     }
   };
 
-  const deleteProject = async (index) => {
+  const deleteProject = (index) => {
+    setConfirmModal({ isOpen: true, type: "project", data: index });
+  };
+
+  const handleConfirmProjectDelete = async () => {
+    const index = confirmModal.data;
+    const loadingToast = toast.loading("Purging project record...");
     await API.delete(`/profile/projects/${index}`);
     setProjects(prev => prev.filter((_, i) => i !== index));
+    toast.success("Project eliminated", { id: loadingToast });
   };
 
   if (!docs) return (
@@ -458,6 +491,17 @@ export default function Documents() {
         </section>
 
       </div>
+
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        onClose={() => setConfirmModal({ isOpen: false, type: "", data: null })}
+        onConfirm={confirmModal.type === "certificate" ? handleConfirmCertDelete : handleConfirmProjectDelete}
+        title={confirmModal.type === "certificate" ? "Purge Certificate?" : "Eliminate Project?"}
+        message={confirmModal.type === "certificate" 
+          ? "This will remove the certificate from your professional index and update your skill extraction metrics."
+          : "Are you sure you want to remove this project from your profile? This cannot be undone."}
+        confirmText="Confirm Purge"
+      />
     </div>
   );
 }

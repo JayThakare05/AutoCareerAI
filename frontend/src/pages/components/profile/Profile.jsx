@@ -2,24 +2,30 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../../api/api";
 import { User, MapPin, GraduationCap, Briefcase, Database, ArrowLeft, Camera, ShieldCheck, Zap } from "lucide-react";
+import toast from "react-hot-toast";
 
 /* ---------------- HELPERS ---------------- */
 const isImage = (path) => /\.(jpg|jpeg|png)$/i.test(path);
 
 const openFile = async (path) => {
   if (!path) return;
+  const loadingToast = toast.loading("Decrypting profile asset...");
   try {
     const token = localStorage.getItem("token");
     const res = await fetch(
       `http://localhost:5000/api/upload/file?filePath=${encodeURIComponent(path)}`,
       { headers: { Authorization: token } }
     );
-    if (!res.ok) return alert("Authorization failed");
+    if (!res.ok) {
+        toast.error("Decryption failed. Unauthorized access.", { id: loadingToast });
+        return;
+    }
     const blob = await res.blob();
     const fileURL = URL.createObjectURL(blob);
     window.open(fileURL, "_blank");
+    toast.success("Identity asset decrypted", { id: loadingToast });
   } catch {
-    alert("Unable to open file");
+    toast.error("Vault access error", { id: loadingToast });
   }
 };
 
@@ -72,21 +78,27 @@ export default function Profile() {
   const securePhoto = useSecurePreview(profilePhotoPath);
 
   const uploadPhoto = async () => {
-    if (!photo) return alert("Select a photo");
-    const fd = new FormData();
-    fd.append("photo", photo);
-    await API.post("/profile/photo", fd);
-    alert("Profile photo updated");
-    window.location.reload();
+    if (!photo) return toast.error("Select an image for upload");
+    const loadingToast = toast.loading("Updating biometric visualization...");
+    try {
+        const fd = new FormData();
+        fd.append("photo", photo);
+        await API.post("/profile/photo", fd);
+        toast.success("Visualization updated", { id: loadingToast });
+        setTimeout(() => window.location.reload(), 1000);
+    } catch {
+        toast.error("Upload failed", { id: loadingToast });
+    }
   };
 
   const updateProfile = async () => {
     setLoading(true);
+    const loadingToast = toast.loading("Committing changes to professional record...");
     try {
       await API.put("/profile", user);
-      alert("Profile updated successfully");
+      toast.success("Profile record synchronized", { id: loadingToast });
     } catch {
-      alert("Failed to update profile");
+      toast.error("Failed to commit profile changes", { id: loadingToast });
     } finally {
       setLoading(false);
     }

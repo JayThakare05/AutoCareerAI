@@ -25,6 +25,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 class ProjectChatRequest(BaseModel):
     projects: list
     message: str
+    history: list = []
 # =====================================================
 # 1️⃣ CERTIFICATE → SKILL EXTRACTION (EXISTING)
 # =====================================================
@@ -71,7 +72,8 @@ async def project_recommend(req: ProjectChatRequest):
     reply = await run_in_threadpool(
         recommend_project,
         req.projects,
-        req.message
+        req.message,
+        req.history
     )
     print(reply)
     return reply

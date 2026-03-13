@@ -42,7 +42,7 @@ export default function Dashboard({ children, title }) {
         {/* Page title */}
         <div className="px-8 pt-6 pb-3 bg-gray-50 dark:bg-[#080810] shrink-0 animate-fade-in">
           <h2 className="text-xl font-bold text-gray-900 dark:text-slate-100">
-            {title || "Jobs recommended for you 🚀"}
+            {title || "Jobs recommended for you "}
           </h2>
         </div>
 

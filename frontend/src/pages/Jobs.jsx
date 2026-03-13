@@ -25,7 +25,7 @@ export default function Jobs() {
   }, []);
 
   return (
-    <DashboardLayout title="Jobs as per Certificates 🎯">
+    <DashboardLayout title="Jobs as per Certificates ">
       <div className="max-w-4xl mx-auto pb-12 animate-fade-in stagger">
 
         {/* HEADER HERO */}
@@ -72,7 +72,7 @@ export default function Jobs() {
             </div>
             <h3 className="text-lg font-bold text-gray-900 dark:text-slate-100 italic">No exact matches found</h3>
             <p className="text-sm text-gray-500 dark:text-slate-400 mt-2 max-w-xs mx-auto">Upload more certificates or try updating your profile to expand our search parameters.</p>
-            <button onClick={() => navigate("/upload")} className="mt-6 px-8 py-3 rounded-2xl bg-blue-600 dark:bg-electric text-white font-bold text-sm shadow-xl hover:scale-105 active:scale-95 transition-all">
+            <button onClick={() => navigate("/documents")} className="mt-6 px-8 py-3 rounded-2xl bg-blue-600 dark:bg-electric text-white font-bold text-sm shadow-xl hover:scale-105 active:scale-95 transition-all">
               Upload Now →
             </button>
           </div>

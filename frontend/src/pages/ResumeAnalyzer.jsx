@@ -6,6 +6,7 @@ import AnalysisCard from "./components/AnalysisCard";
 import SkillPieChart from "./components/charts/SkillPieChart";
 import SkillMatrix from "./components/charts/SkillMatrix";
 import { Upload, Briefcase, ChevronRight, Activity } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function ResumeAnalyzer() {
   const [resume, setResume] = useState(null);
@@ -21,18 +22,20 @@ export default function ResumeAnalyzer() {
 
   const analyzeResume = async () => {
     if (!resume || !jobRole)
-      return alert("Please upload resume and enter job role");
+      return toast.error("Please upload a resume and specify the target job role");
 
     const formData = new FormData();
     formData.append("resume", resume);
     formData.append("jobRole", jobRole);
     setLoading(true);
+    const analysisToast = toast.loading("Analyzing resume with neural engine...");
     try {
       const res = await API.post("/ai/resume-analyze", formData);
       const data = typeof res.data === "string" ? JSON.parse(res.data) : res.data;
       setResult(data);
+      toast.success("Analysis complete!", { id: analysisToast });
     } catch {
-      alert("Resume analysis failed");
+      toast.error("Resume analysis failed. Please check the file and try again.", { id: analysisToast });
     } finally {
       setLoading(false);
     }

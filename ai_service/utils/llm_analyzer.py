@@ -1,9 +1,18 @@
-from langchain_ollama import OllamaLLM
+import os
+from dotenv import load_dotenv
+from openai import OpenAI
 from utils.prompts import resume_analysis_prompt
 from utils.text_utils import clean_text
 from utils.text_utils import normalize_text
 import json
 import re
+
+load_dotenv()
+
+client = OpenAI(
+    api_key=os.getenv("GROQ_API_KEY"),
+    base_url="https://api.groq.com/openai/v1"
+)
 
 def llm_output_to_dict(response: str) -> dict:
     """
@@ -22,15 +31,19 @@ def llm_output_to_dict(response: str) -> dict:
         print("JSON parsing failed:", e)
         return {}
 
-llm = OllamaLLM(model="llama3", temperature=0)
+def call_groq(prompt: str, temperature: float = 0) -> str:
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=temperature,
+    )
+    return response.choices[0].message.content
 
 def analyze_resume(resume_text, job_role):
     resume_text = normalize_text(clean_text(resume_text))
     job_role = normalize_text(job_role)
 
     prompt = resume_analysis_prompt(resume_text, job_role)
-    response = llm.invoke(prompt)
-    #print(response)
+    response = call_groq(prompt)
     result = llm_output_to_dict(response)
-    #print(result)
     return result

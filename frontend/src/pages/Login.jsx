@@ -2,19 +2,31 @@ import { useState } from "react";
 import API from "../api/api";
 import { useNavigate, Link } from "react-router-dom";
 import ThemeToggle from "./components/ThemeToggle";
+import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    setLoading(true);
+    const loadingToast = toast.loading("Authenticating...");
     try {
       const res = await API.post("/auth/login", { email, password });
       localStorage.setItem("token", res.data.token);
+      toast.success("Welcome back!", { id: loadingToast });
       navigate("/dashboard");
     } catch (err) {
-      alert("Invalid email or password");
+      toast.error(err.response?.data?.message || "Invalid email or password", { id: loadingToast });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -27,24 +39,28 @@ export default function Login() {
 
       {/* Logo & Theme Toggle */}
       <div className="absolute top-6 left-6 flex items-center gap-4">
-        <div className="text-white text-2xl font-extrabold tracking-wide drop-shadow-lg">
-          AutoCareer<span className="text-purple-300 dark:text-electric">AI</span>
-        </div>
+        <Link to="/" className="text-white text-2xl font-extrabold tracking-tight drop-shadow-lg hover:scale-105 transition-transform">
+          AUTOCAREER<span className="text-purple-300 dark:text-electric">AI</span>
+        </Link>
       </div>
       <div className="absolute top-6 right-6">
         <ThemeToggle />
       </div>
 
       {/* Center Card */}
-      <div className="relative z-10 w-full max-w-[400px] animate-slide-up">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="relative z-10 w-full max-w-[400px]"
+      >
         <div className="backdrop-blur-xl bg-white/10 dark:bg-black/40 border border-white/20 dark:border-electric/20
-                        p-8 rounded-3xl shadow-2xl dark:shadow-electric/10 text-white">
+                        p-10 rounded-[32px] shadow-2xl dark:shadow-electric/10 text-white">
 
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-2 tracking-tight">
-              Welcome Back <span className="inline-block animate-float">👋</span>
+            <h2 className="text-3xl font-black italic tracking-tighter mb-2 italic uppercase">
+              Welcome Back
             </h2>
-            <p className="text-sm text-white/70 dark:text-slate-400">
+            <p className="text-sm text-white/70 dark:text-slate-400 font-medium">
               Login to continue your career journey
             </p>
           </div>
@@ -52,40 +68,44 @@ export default function Login() {
           <div className="space-y-5">
             {/* Email */}
             <div className="group">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-white/50 mb-1.5 ml-1">Email Address</label>
+              <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-2 ml-1">Email Address</label>
               <input
-                className="w-full p-3.5 rounded-2xl bg-white/10 dark:bg-white/5 border border-white/10 dark:border-white/5 text-white
+                className="w-full p-4 rounded-2xl bg-white/10 dark:bg-white/5 border border-white/10 dark:border-white/5 text-white
                            placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-electric 
-                           transition-all duration-300 group-hover:bg-white/20"
+                           transition-all duration-300 group-hover:bg-white/20 font-medium"
                 placeholder="name@company.com"
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
             {/* Password */}
             <div className="group">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-white/50 mb-1.5 ml-1">Password</label>
+              <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-2 ml-1">Password</label>
               <input
                 type="password"
-                className="w-full p-3.5 rounded-2xl bg-white/10 dark:bg-white/5 border border-white/10 dark:border-white/5 text-white
+                className="w-full p-4 rounded-2xl bg-white/10 dark:bg-white/5 border border-white/10 dark:border-white/5 text-white
                            placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-electric 
-                           transition-all duration-300 group-hover:bg-white/20"
+                           transition-all duration-300 group-hover:bg-white/20 font-medium"
                 placeholder="••••••••"
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
               />
             </div>
 
             {/* Login Button */}
             <button
               onClick={handleLogin}
-              className="w-full mt-4 py-4 rounded-2xl font-bold text-white
+              disabled={loading}
+              className="w-full mt-4 py-4 rounded-2xl font-black uppercase tracking-[0.2em] text-sm text-white
                          bg-gradient-to-r from-blue-500 to-purple-500 dark:from-electric dark:to-purple-600
                          shadow-lg shadow-blue-500/20 dark:shadow-electric/20
-                         hover:scale-[1.02] active:scale-[0.98]
-                         transition-all duration-300 relative overflow-hidden group"
+                         hover:scale-[1.05] active:scale-[0.95]
+                         transition-all duration-300 relative overflow-hidden group disabled:opacity-50 disabled:hover:scale-100"
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
-                Login <span className="group-hover:translate-x-1 transition-transform">→</span>
+                {loading ? "Authenticating..." : "Login"} <span className="group-hover:translate-x-1 transition-transform">→</span>
               </span>
               <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
             </button>
@@ -93,17 +113,17 @@ export default function Login() {
 
           {/* Register Link */}
           <div className="mt-8 text-sm text-center">
-            <span className="text-white/60">New here? </span>
+            <span className="text-white/60 font-medium">New here? </span>
             <Link
               to="/register"
-              className="text-blue-300 dark:text-electric font-bold hover:underline underline-offset-4 decoration-2"
+              className="text-blue-300 dark:text-electric font-black uppercase tracking-widest text-xs hover:underline underline-offset-4 decoration-2 ml-1"
             >
-              Create an account
+              Create Account
             </Link>
           </div>
 
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

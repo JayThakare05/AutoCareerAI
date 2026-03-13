@@ -1,91 +1,80 @@
-from langchain_ollama import OllamaLLM
-import json
-import re
+import os
+from dotenv import load_dotenv
+from openai import OpenAI
 
-llm = OllamaLLM(model="llama3", temperature=0.2)
+load_dotenv()
 
-def build_project_prompt(projects: list, message: str) -> str:
+client = OpenAI(
+    api_key=os.getenv("GROQ_API_KEY"),
+    base_url="https://api.groq.com/openai/v1"
+)
+
+def call_groq(prompt: str, temperature: float = 0.3) -> str:
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=temperature,
+    )
+    return response.choices[0].message.content
+
+def recommend_project(projects, message, history):
+
+    # ------------------------
+    # format projects
+    # ------------------------
     project_text = ""
 
     for i, p in enumerate(projects, start=1):
-        title = p.get("title", "Untitled Project")
-        description = p.get("description", "No description provided")
-        tech_stack = ", ".join(p.get("techStack", [])) or "Not specified"
+        tech = ", ".join(p.get("techStack", []))
 
         project_text += f"""
 Project {i}
-Title: {title}
-Description: {description}
-Tech Stack: {tech_stack}
+Title: {p.get("title")}
+Description: {p.get("description")}
+Tech Stack: {tech}
 """
 
-    return f"""
-You are a senior software engineer and career mentor.
+    if not project_text:
+        project_text = "User has no projects."
 
-USER'S EXISTING PROJECTS (FOR ANALYSIS ONLY):
+    # ------------------------
+    # format chat history
+    # ------------------------
+    history_text = ""
+
+    for h in history:
+        # the role mapped back from DB ('user' or 'ai')
+        role = "Assistant" if h.get("role") == "ai" else "User"
+        history_text += f"{role}: {h.get('text')}\n"
+
+    # ------------------------
+    # prompt
+    # ------------------------
+    prompt = f"""
+You are an AI assistant that helps users analyze their projects, suggest new project ideas, and chat naturally about them.
+You must be conversational and contextual. If the user asks a follow-up question (like "why is difficulty hard?"), answer it by looking at the conversation history and providing a helpful, natural response. Wait for user prompts.
+
+User Projects:
 {project_text}
 
-CRITICAL RULES:
-- Existing projects are ONLY for skill analysis
-- DO NOT return, summarize, or reference them
-- DO NOT reuse their titles or descriptions
-- Suggest EXACTLY ONE new project
-- The suggested project MUST NOT overlap with existing ones
+Conversation History (Context):
+{history_text}
 
-USER MESSAGE:
+User Message:
 {message}
 
-TASK:
-Analyze the user's skill level and recommend ONE new project that:
-- Builds on their strengths
-- Covers missing skills
-- Maximizes resume value
+Do NOT output 'Sorry, your prompt is not understandable.' Just answer normally based on context.
 
-RETURN FORMAT:
-Return STRICTLY valid JSON with EXACTLY this structure:
+If the user is explicitly asking for a NEW project recommendation, use this format:
+🚀 Project: <Project Name>
+💡 Reason: <Why it fits user's skills>
+🛠️ Stack: <Technologies>
+📊 Difficulty: <Easy/Medium/Hard>
+⭐ Value: <Why it's good for portfolio>
 
-{{
-  "intent": "recommendation",
-  "projectLevel": "beginner | intermediate | advanced",
-  "recommendation": {{
-    "title": "string",
-    "reason": "string",
-    "techStack": ["string"],
-    "difficulty": "Beginner | Intermediate | Advanced",
-    "resumeValue": "Low | Medium | High"
-  }},
-  "feedback": "string"
-}}
-
-STRICT RULES:
-- Return ONLY JSON
-- No markdown
-- No explanation
-- If more than one project is returned, the response is INVALID
+If the user asks a follow-up question, or asks for advice, or anything conversational, just respond in a standard, natural chat format instead of that strict project structure.
 """
 
+    response = call_groq(prompt)
 
-
-def parse_json_from_llm(text: str) -> dict:
-    """
-    Safely extract JSON from LLM output
-    """
-    try:
-        match = re.search(r"\{[\s\S]*\}", text)
-        if not match:
-            raise ValueError("No JSON found")
-
-        return json.loads(match.group())
-    except Exception as e:
-        return {
-            "intent": "error",
-            "projectLevel": "unknown",
-            "recommendations": [],
-            "feedback": "AI response could not be parsed into JSON"
-        }
-
-def recommend_project(projects: list, message: str) -> dict:
-    prompt = build_project_prompt(projects, message)
-    raw_response = llm.invoke(prompt)
-    print(raw_response)
-    return parse_json_from_llm(raw_response)
+    return response

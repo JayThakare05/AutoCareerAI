@@ -10,7 +10,7 @@ const Topbar = ({ user, navigate }) => {
       <div className="
         bg-white dark:bg-[#111118]
         border-b border-gray-200 dark:border-[#1e1e30]
-        px-6 py-3 flex items-center justify-between
+        pl-16 md:pl-6 pr-6 py-3 flex items-center justify-between
       ">
         {/* Welcome */}
         <h2 className="text-base font-semibold text-gray-800 dark:text-slate-100 animate-fade-in">

@@ -3,5 +3,6 @@ uvicorn
 pytesseract
 pillow
 PyMuPDF
-langchain-ollama
+openai
 python-multipart
+python-dotenv

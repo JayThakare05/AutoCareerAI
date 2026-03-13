@@ -4,6 +4,7 @@ import DashboardLayout from "./Dashboard";
 import JobCard from "./components/JobCard";
 import { Bookmark, Search, Trash2, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function SavedJobs() {
   const [jobs, setJobs] = useState([]);
@@ -13,15 +14,18 @@ export default function SavedJobs() {
   useEffect(() => {
     API.get("/saved-jobs")
       .then(res => setJobs(res.data))
+      .catch(() => toast.error("Failed to fetch saved jobs"))
       .finally(() => setLoading(false));
   }, []);
 
   const removeJob = async (jobId) => {
+    const loadingToast = toast.loading("Removing from bookmarks...");
     try {
       await API.delete(`/saved-jobs/${encodeURIComponent(jobId)}`);
       setJobs(jobs.filter(j => j.jobId !== jobId));
+      toast.success("Bookmark removed", { id: loadingToast });
     } catch {
-      alert("Failed to remove job from bookmarks");
+      toast.error("Failed to remove bookmark", { id: loadingToast });
     }
   };
 
