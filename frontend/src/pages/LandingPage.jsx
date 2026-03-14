@@ -155,7 +155,7 @@ const FloatingBadge = ({ icon: Icon, label, value, color, style, delay }) => (
 ───────────────────────────────────────────── */
 export default function LandingPage() {
   const navigate = useNavigate();
-
+  
   return (
     <div
       className="min-h-screen bg-[#07070c] text-white overflow-x-hidden"

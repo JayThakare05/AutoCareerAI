@@ -16,6 +16,10 @@ from utils.project_recommender import recommend_project
 
 app = FastAPI(title="AutoCareerAI – Unified AI Service")
 
+@app.get("/")
+async def root():
+    return {"message": "AutoCareerAI AI Service is Running!"}
+
 # ---------- MODELS ----------
 class CertificateRequest(BaseModel):
     file_path: str
