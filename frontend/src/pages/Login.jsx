@@ -48,7 +48,7 @@ export default function Login() {
       </div>
 
       {/* Center Card */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         className="relative z-10 w-full max-w-[400px]"

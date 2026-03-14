@@ -12,12 +12,12 @@ app.use(cors());
 app.use(express.json());
 // app.use(cookieParser()); // 👈 REQUIRED for req.cookies
 
-app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/upload", require("./routes/uploadRoutes"));
-app.use("/api/profile", require("./routes/profileRoutes"));
-app.use("/api/jobs", require("./routes/jobRoutes"));
-app.use("/api/ai", require("./routes/aiRoutes"));
-app.use("/api/resume", require("./routes/resumeRoutes"));
+app.use("/auth", require("./routes/authRoutes"));
+app.use("/upload", require("./routes/uploadRoutes"));
+app.use("/profile", require("./routes/profileRoutes"));
+app.use("/jobs", require("./routes/jobRoutes"));
+app.use("/ai", require("./routes/aiRoutes"));
+app.use("/resume", require("./routes/resumeRoutes"));
 app.use("/api/saved-jobs", require("./routes/savedJobRoutes"));
 app.use("/api/project-recommend", require("./routes/projectRoutes"))
 

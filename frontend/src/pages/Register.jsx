@@ -92,28 +92,26 @@ export default function Register() {
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-400/20 dark:bg-blue-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
 
       {/* Logo & Theme Toggle */}
-      <div className="absolute top-6 left-6 flex items-center gap-4">
-        <Link to="/" className="text-white text-2xl font-black tracking-tight drop-shadow-lg no-underline hover:scale-105 transition-transform">
+      <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-50">
+        <Link to="/" className="text-white text-xl md:text-2xl font-black tracking-tight drop-shadow-lg no-underline hover:scale-105 transition-transform">
           AUTOCAREER<span className="text-blue-300 dark:text-electric">AI</span>
         </Link>
-      </div>
-      <div className="absolute top-6 right-6">
         <ThemeToggle />
       </div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="relative z-10 w-full max-w-3xl"
       >
         <div className="backdrop-blur-xl bg-white/10 dark:bg-black/40 border border-white/20 dark:border-electric/20
-                        rounded-[32px] shadow-2xl dark:shadow-electric/10 p-10 text-white overflow-hidden">
+                        rounded-[32px] shadow-2xl dark:shadow-electric/10 p-6 md:p-10 text-white overflow-hidden mt-16 md:mt-0">
 
           <Progress step={step} />
 
           <AnimatePresence mode="wait">
-            <motion.div 
-              key={step} 
+            <motion.div
+              key={step}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
@@ -135,7 +133,7 @@ export default function Register() {
                     <Input label="Confirm Password *" type="password" name="confirmPassword" onChange={handleChange} value={form.confirmPassword || ""} error={errors.confirmPassword} />
                   </Grid>
                   <div className="mt-8 flex justify-end">
-                    <Primary onClick={next}>Continue →</Primary>
+                    <Primary onClick={next} className="w-full sm:w-auto">Continue →</Primary>
                   </div>
                 </>
               )}
@@ -229,9 +227,11 @@ export default function Register() {
                   </Grid>
                   <Input label="Skills (Comma separated) *" name="skills" placeholder="React, Node.js, Python..." onChange={handleChange} value={form.skills || ""} error={errors.skills} />
                   <Input label="Interested Job Roles *" name="interestedJobs" placeholder="Frontend Dev, ML Engineer..." onChange={handleChange} value={form.interestedJobs || ""} error={errors.interestedJobs} />
-                  <div className="mt-8 flex justify-between">
-                    <Ghost onClick={prev}>← Back</Ghost>
-                    <Primary onClick={handleRegister} disabled={loading}>{loading ? "Finishing..." : "Complete Registration ✓"}</Primary>
+                  <div className="mt-8 flex flex-col sm:flex-row justify-between gap-4">
+                    <Ghost onClick={prev} className="w-full sm:w-auto">← Back</Ghost>
+                    <Primary onClick={handleRegister} disabled={loading} className="w-full sm:w-auto">
+                      {loading ? "Finishing..." : "Complete Registration ✓"}
+                    </Primary>
                   </div>
                 </>
               )}
@@ -288,7 +288,7 @@ const Input = ({ label, error, ...props }) => (
     />
     <AnimatePresence>
       {error && (
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-[10px] text-red-400 font-black uppercase tracking-widest mt-2 ml-2"
@@ -322,20 +322,20 @@ const Section = ({ title, children }) => (
   </div>
 );
 
-const Primary = ({ children, onClick, disabled }) => (
+const Primary = ({ children, onClick, disabled, className = "" }) => (
   <button
     onClick={onClick}
     disabled={disabled}
-    className="px-10 py-4 rounded-2xl font-black uppercase tracking-[0.2em] text-[11px] bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-electric dark:to-blue-600 text-white shadow-2xl shadow-blue-500/20 hover:scale-105 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100"
+    className={`px-10 py-4 rounded-2xl font-black uppercase tracking-[0.2em] text-[11px] bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-electric dark:to-blue-600 text-white shadow-2xl shadow-blue-500/20 hover:scale-105 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100 ${className}`}
   >
     {children}
   </button>
 );
 
-const Ghost = ({ children, onClick }) => (
+const Ghost = ({ children, onClick, className = "" }) => (
   <button
     onClick={onClick}
-    className="px-10 py-4 rounded-2xl font-black uppercase tracking-[0.2em] text-[11px] bg-white/10 text-white hover:bg-white/20 active:scale-95 transition-all duration-300"
+    className={`px-10 py-4 rounded-2xl font-black uppercase tracking-[0.2em] text-[11px] bg-white/10 text-white hover:bg-white/20 active:scale-95 transition-all duration-300 ${className}`}
   >
     {children}
   </button>
