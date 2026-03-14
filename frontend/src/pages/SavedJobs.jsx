@@ -64,7 +64,7 @@ export default function SavedJobs() {
         {/* EMPTY STATE */}
         {!loading && jobs.length === 0 && (
           <div className="text-center py-24 bg-gray-50 dark:bg-[#111118] border border-dashed border-gray-200 dark:border-[#1e1e30] rounded-[40px] animate-slide-up relative overflow-hidden group">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-purple-500/5 dark:bg-electric/5 rounded-full blur-[100px] group-hover:scale-125 transition-transform duration-700" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-blue-500/5 dark:bg-electric/5 rounded-full blur-[100px] group-hover:scale-125 transition-transform duration-700" />
             <div className="relative z-10 space-y-6">
               <div className="p-6 bg-white dark:bg-white/5 rounded-3xl inline-block shadow-sm dark:shadow-electric/5 text-gray-300 dark:text-slate-600 animate-float">
                 <Bookmark size={48} />
@@ -75,7 +75,7 @@ export default function SavedJobs() {
               </div>
               <button
                 onClick={() => navigate("/dashboard")}
-                className="px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-electric dark:to-purple-600 text-white font-black text-xs uppercase tracking-widest shadow-xl shadow-blue-500/10 dark:shadow-electric/20 hover:scale-[1.05] active:scale-95 transition-all"
+                className="px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-electric dark:to-blue-600 text-white font-black text-xs uppercase tracking-widest shadow-xl shadow-blue-500/10 dark:shadow-electric/20 hover:scale-[1.05] active:scale-95 transition-all"
               >
                 Discover Roles →
               </button>

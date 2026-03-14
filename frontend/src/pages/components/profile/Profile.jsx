@@ -5,7 +5,7 @@ import { User, MapPin, GraduationCap, Briefcase, Database, ArrowLeft, Camera, Sh
 import toast from "react-hot-toast";
 
 /* ---------------- HELPERS ---------------- */
-const isImage = (path) => /\.(jpg|jpeg|png)$/i.test(path);
+const isImage = (path) => /\.(jpg|jpeg|png|webp|gif|avif)$/i.test(path);
 
 const openFile = async (path) => {
   if (!path) return;
@@ -13,7 +13,7 @@ const openFile = async (path) => {
   try {
     const token = localStorage.getItem("token");
     const res = await fetch(
-      `http://localhost:5000/api/upload/file?filePath=${encodeURIComponent(path)}`,
+          `${import.meta.env.VITE_API_BASE_URL}/upload/file?filePath=${encodeURIComponent(path)}`,
       { headers: { Authorization: token } }
     );
     if (!res.ok) {
@@ -77,12 +77,13 @@ export default function Profile() {
   const profilePhotoPath = user?.documents?.profilePhoto;
   const securePhoto = useSecurePreview(profilePhotoPath);
 
-  const uploadPhoto = async () => {
-    if (!photo) return toast.error("Select an image for upload");
+  const uploadPhoto = async (selectedFile) => {
+    const fileToUpload = selectedFile || photo;
+    if (!fileToUpload) return toast.error("Select an image for upload");
     const loadingToast = toast.loading("Updating biometric visualization...");
     try {
         const fd = new FormData();
-        fd.append("photo", photo);
+        fd.append("photo", fileToUpload);
         await API.post("/profile/photo", fd);
         toast.success("Visualization updated", { id: loadingToast });
         setTimeout(() => window.location.reload(), 1000);
@@ -113,7 +114,7 @@ export default function Profile() {
           <div className="bg-white dark:bg-[#111118] rounded-[32px] p-8 border border-gray-100 dark:border-[#1e1e30] shadow-sm dark:shadow-card-dark sticky top-8">
             <button
               onClick={() => navigate(-1)}
-              className="mb-10 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-purple-600 dark:hover:text-electric transition-colors"
+              className="mb-10 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-blue-600 dark:hover:text-electric transition-colors"
             >
               <ArrowLeft size={12} /> Back
             </button>
@@ -128,7 +129,7 @@ export default function Profile() {
                   className={`
                        px-5 py-3.5 rounded-2xl cursor-pointer font-bold text-sm flex items-center gap-3 transition-all duration-200 animate-slide-in
                        ${active === s.id
-                      ? "bg-purple-600 dark:bg-electric text-white shadow-lg shadow-purple-500/20 dark:shadow-electric/30 scale-105"
+                      ? "bg-blue-600 dark:bg-electric text-white shadow-lg shadow-blue-500/20 dark:shadow-electric/30 scale-105"
                       : "text-gray-500 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-800 dark:hover:text-slate-200"
                     }
                      `}
@@ -156,7 +157,7 @@ export default function Profile() {
 
             {/* ACCENT DECOR */}
             <div className="absolute top-0 right-0 p-12 opacity-[0.03] dark:opacity-[0.02] pointer-events-none">
-              <User size={300} className="text-purple-600 dark:text-electric rotate-12" />
+              <User size={300} className="text-blue-600 dark:text-electric rotate-12" />
             </div>
 
             <div className="p-8 md:p-12 relative z-10">
@@ -172,16 +173,19 @@ export default function Profile() {
                       {securePhoto ? (
                         <img src={securePhoto} className="w-full h-full object-cover" />
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-purple-500 to-indigo-600 dark:from-electric/20 dark:to-purple-900/40 flex items-center justify-center text-white dark:text-electric text-5xl font-black italic italic">
+                        <div className="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 dark:from-electric/20 dark:to-blue-900/40 flex items-center justify-center text-white dark:text-electric text-5xl font-black italic italic">
                           {user.firstName?.charAt(0)}
                         </div>
                       )}
                     </div>
-                    <label className="absolute bottom-1 right-1 p-2 bg-purple-600 dark:bg-electric text-white rounded-xl shadow-lg cursor-pointer hover:scale-110 active:scale-95 transition-all">
+                    <label className="absolute bottom-1 right-1 p-2 bg-blue-600 dark:bg-electric text-white rounded-xl shadow-lg cursor-pointer hover:scale-110 active:scale-95 transition-all">
                       <Camera size={14} />
                       <input type="file" className="hidden" onChange={e => {
-                        setPhoto(e.target.files[0]);
-                        uploadPhoto();
+                        const file = e.target.files[0];
+                        if (file) {
+                          setPhoto(file);
+                          uploadPhoto(file);
+                        }
                       }} />
                     </label>
                   </div>
@@ -325,7 +329,7 @@ export default function Profile() {
                         <div className="flex flex-wrap gap-2">
                           {user.extractedSkills?.length > 0 ? (
                             user.extractedSkills.map((s, i) => (
-                              <span key={i} className="px-3 py-1.5 bg-purple-500/10 dark:bg-electric/10 border border-purple-500/20 dark:border-electric/20 text-[10px] font-black text-purple-600 dark:text-electric uppercase tracking-widest rounded-xl">
+                              <span key={i} className="px-3 py-1.5 bg-blue-500/10 dark:bg-electric/10 border border-blue-500/20 dark:border-electric/20 text-[10px] font-black text-blue-600 dark:text-electric uppercase tracking-widest rounded-xl">
                                 {s}
                               </span>
                             ))
@@ -344,7 +348,7 @@ export default function Profile() {
                 <button
                   onClick={updateProfile}
                   disabled={loading}
-                  className="px-10 py-4 bg-purple-600 dark:bg-electric text-white font-black text-xs uppercase tracking-widest rounded-2xl shadow-xl shadow-purple-500/20 dark:shadow-electric/30 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2 group"
+                  className="px-10 py-4 bg-blue-600 dark:bg-electric text-white font-black text-xs uppercase tracking-widest rounded-2xl shadow-xl shadow-blue-500/20 dark:shadow-electric/30 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2 group"
                 >
                   {loading ? (
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -374,7 +378,7 @@ const updateNested = (obj, set, path, value) => {
 
 const Title = ({ text, icon: Icon }) => (
   <div className="flex items-center gap-3 mb-8">
-    <div className="p-2.5 bg-purple-100 dark:bg-electric/10 rounded-2xl text-purple-600 dark:text-electric">
+    <div className="p-2.5 bg-blue-100 dark:bg-electric/10 rounded-2xl text-blue-600 dark:text-electric">
       <Icon size={20} />
     </div>
     <h2 className="text-2xl font-black italic text-gray-900 dark:text-slate-100 italic tracking-tighter uppercase">{text}</h2>
@@ -385,7 +389,7 @@ const Grid = ({ children }) => <div className="grid md:grid-cols-2 gap-x-8 gap-y
 
 const Section = ({ title, children }) => (
   <div className="p-8 bg-gray-50/50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 rounded-[32px] hover:bg-gray-50 dark:hover:bg-white/[0.04] transition-all">
-    <h3 className="text-xs font-black text-purple-600 dark:text-electric uppercase tracking-[0.2em] mb-6 border-b border-gray-100 dark:border-white/5 pb-3 italic">{title}</h3>
+    <h3 className="text-xs font-black text-blue-600 dark:text-electric uppercase tracking-[0.2em] mb-6 border-b border-gray-100 dark:border-white/5 pb-3 italic">{title}</h3>
     {children}
   </div>
 );
@@ -402,7 +406,7 @@ const Input = ({ label, value, onChange, disabled, type = "text" }) => (
         w-full px-5 py-3.5 rounded-2xl text-sm font-bold border transition-all duration-300
         ${disabled
           ? "bg-gray-100/50 dark:bg-black/20 border-transparent text-gray-400 dark:text-slate-600 cursor-not-allowed"
-          : "bg-white dark:bg-white/5 border-gray-100 dark:border-white/5 text-gray-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-electric hover:border-gray-200 dark:hover:border-white/10"
+          : "bg-white dark:bg-white/5 border-gray-100 dark:border-white/5 text-gray-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-electric hover:border-gray-200 dark:hover:border-white/10"
         }
       `}
     />
@@ -415,7 +419,7 @@ const Select = ({ label, value, options, onChange }) => (
     <select
       value={value || ""}
       onChange={e => onChange(e.target.value)}
-      className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-[#111118] border border-gray-100 dark:border-white/5 text-sm font-bold text-gray-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-electric transition-all"
+      className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-[#111118] border border-gray-100 dark:border-white/5 text-sm font-bold text-gray-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-electric transition-all"
     >
       <option value="" className="bg-white dark:bg-[#111118]">Unset Configuration</option>
       {options.map(o => <option key={o} value={o} className="bg-white dark:bg-[#111118]">{o}</option>)}

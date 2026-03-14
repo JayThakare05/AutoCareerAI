@@ -118,10 +118,10 @@ export default function ResumeAnalyzer() {
 
           {/* QUICK STATS/INFO */}
           <div className="space-y-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-            <div className="bg-gradient-to-br from-blue-500 to-indigo-600 dark:from-electric/20 dark:to-purple-900/40 p-1 rounded-3xl shadow-xl">
+            <div className="bg-gradient-to-br from-blue-500 to-indigo-600 dark:from-electric/20 dark:to-blue-900/40 p-1 rounded-3xl shadow-xl">
               <div className="bg-white dark:bg-[#111118]/80 backdrop-blur-xl rounded-[22px] p-8 h-full">
                 <h4 className="text-lg font-bold mb-4 flex items-center gap-2 dark:text-slate-100">
-                  <Activity size={18} className="text-purple-400" />
+                  <Activity size={18} className="text-blue-400" />
                   Why Analyze?
                 </h4>
                 <ul className="space-y-4">

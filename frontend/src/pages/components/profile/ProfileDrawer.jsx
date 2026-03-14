@@ -41,16 +41,16 @@ const ProfileDrawer = ({ user, open, onClose, navigate }) => {
 
         {/* Profile info */}
         <div className="flex flex-col items-center p-7 border-b border-gray-200 dark:border-[#1e1e30]">
-          {user.profilePhoto ? (
+          {(user.profilePhoto || user.documents?.profilePhoto) ? (
             <img
-              src={user.profilePhoto}
+              src={user.profilePhoto || user.documents?.profilePhoto}
               alt="Profile"
-              className="w-20 h-20 rounded-full object-cover mb-3 border-2 border-purple-400 dark:border-electric shadow"
+              className="w-20 h-20 rounded-full object-cover mb-3 border-2 border-electric shadow dark:border-electric shadow"
             />
           ) : (
             <div className="
               w-20 h-20 rounded-full mb-3
-              bg-purple-600 dark:bg-electric/20 dark:border-2 dark:border-electric
+              bg-blue-600 dark:bg-electric/20 dark:border-2 dark:border-electric
               flex items-center justify-center
               text-white dark:text-electric text-2xl font-bold
               shadow-lg dark:shadow-electric
@@ -98,8 +98,8 @@ const MenuItem = ({ icon, label, onClick }) => (
     className="
       flex items-center gap-3 px-4 py-2.5 rounded-xl cursor-pointer
       text-gray-700 dark:text-slate-300 font-medium text-sm
-      hover:bg-purple-50 dark:hover:bg-electric/10
-      hover:text-purple-700 dark:hover:text-electric
+      hover:bg-blue-50 dark:hover:bg-electric/10
+      hover:text-blue-700 dark:hover:text-electric
       transition-all duration-200
     "
   >

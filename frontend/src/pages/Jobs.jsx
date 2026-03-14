@@ -29,7 +29,7 @@ export default function Jobs() {
       <div className="max-w-4xl mx-auto pb-12 animate-fade-in stagger">
 
         {/* HEADER HERO */}
-        <div className="bg-gradient-to-br from-blue-600 to-indigo-700 dark:from-[#00b4ff]/20 dark:to-purple-900/40 
+        <div className="bg-gradient-to-br from-blue-600 to-indigo-700 dark:from-[#00b4ff]/20 dark:to-blue-900/40 
                         p-10 rounded-[32px] shadow-2xl shadow-blue-500/10 dark:shadow-electric/10 mb-10 relative overflow-hidden group animate-slide-up">
           <div className="absolute top-[-20%] right-[-10%] w-[300px] h-[300px] bg-white/10 dark:bg-electric/10 rounded-full blur-[80px] group-hover:scale-110 transition-transform duration-700" />
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">

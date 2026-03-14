@@ -38,7 +38,7 @@ const Sidebar = ({ navigate }) => {
         className="text-xl font-extrabold mb-10 cursor-pointer text-blue-600 dark:text-electric animate-fade-in hover:opacity-80 transition-opacity"
         onClick={() => { navigate("/dashboard"); setMobileOpen(false); }}
       >
-        AutoCareer<span className="text-purple-400 dark:text-electric-light">AI</span>
+        AutoCareer<span className="text-blue-500 dark:text-electric-light">AI</span>
       </h1>
 
       {/* Nav */}

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 exports.getResumeHistory = async (req, res) => {
   try {
-    console.log(req.user)
+    //console.log(req.user)
     const history = await ResumeAnalysis.find({
       userId: new mongoose.Types.ObjectId(req.user)
     }).sort({ createdAt: -1 });

@@ -29,9 +29,9 @@ const UploadCard = ({
           file:mr-5 file:py-3 file:px-6
           file:rounded-2xl file:border-0
           file:text-xs file:font-black file:uppercase file:tracking-widest
-          file:bg-purple-50 file:text-purple-700
+          file:bg-blue-50 file:text-blue-700
           dark:file:bg-electric/10 dark:file:text-electric
-          hover:file:bg-purple-100 dark:hover:file:bg-electric/20
+          hover:file:bg-blue-100 dark:hover:file:bg-electric/20
           transition-all cursor-pointer
         "
       />
@@ -43,7 +43,7 @@ const UploadCard = ({
         mt-8 w-full py-4 rounded-2xl text-white font-black text-xs uppercase tracking-[0.2em]
         shadow-xl transition-all active:scale-95
         ${color === "blue"
-          ? "bg-purple-600 dark:bg-electric shadow-purple-500/20 dark:shadow-electric/20 hover:bg-purple-700 dark:hover:bg-electric-dark"
+          ? "bg-blue-600 dark:bg-electric shadow-blue-500/20 dark:shadow-electric/20 hover:bg-blue-700 dark:hover:bg-electric-dark"
           : "bg-green-600 dark:bg-green-500 shadow-green-500/20 dark:shadow-green-500/20 hover:bg-green-700 dark:hover:bg-green-600"}
       `}
     >

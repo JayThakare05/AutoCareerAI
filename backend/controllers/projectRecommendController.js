@@ -77,7 +77,7 @@ exports.projectChat = async (req, res) => {
 
     /* ---------- SEND TO AI SERVICE ---------- */
     const aiResponse = await axios.post(
-      "http://localhost:8001/project-recommend",
+      `${process.env.AI_SERVICE_URL}/project-recommend`,
       {
         projects: projectContext,
         message: userMessage,

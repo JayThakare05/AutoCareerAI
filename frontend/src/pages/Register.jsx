@@ -85,16 +85,16 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen transition-colors duration-500 bg-gradient-to-br from-blue-600 via-indigo-500 to-purple-400 dark:from-slate-900 dark:via-black dark:to-slate-900 flex items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen transition-colors duration-500 bg-gradient-to-br from-blue-600 via-indigo-500 to-blue-400 dark:from-slate-900 dark:via-black dark:to-slate-900 flex items-center justify-center p-6 relative overflow-hidden">
 
       {/* Background Decorative Elements */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/20 dark:bg-electric/10 rounded-full blur-[120px] animate-pulse" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-400/20 dark:bg-purple-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-400/20 dark:bg-blue-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
 
       {/* Logo & Theme Toggle */}
       <div className="absolute top-6 left-6 flex items-center gap-4">
         <Link to="/" className="text-white text-2xl font-black tracking-tight drop-shadow-lg no-underline hover:scale-105 transition-transform">
-          AUTOCAREER<span className="text-purple-300 dark:text-electric">AI</span>
+          AUTOCAREER<span className="text-blue-300 dark:text-electric">AI</span>
         </Link>
       </div>
       <div className="absolute top-6 right-6">
@@ -251,13 +251,13 @@ const Progress = ({ step }) => {
     <div className="mb-10 text-center">
       <div className="flex justify-between items-center mb-3 px-1">
         <span className="text-[10px] font-black uppercase tracking-widest text-white/50 italic">Progression: Stage {step} of 4</span>
-        <span className="text-[10px] font-black text-purple-300 dark:text-electric uppercase tracking-widest">{percent}% Ready</span>
+        <span className="text-[10px] font-black text-blue-300 dark:text-electric uppercase tracking-widest">{percent}% Ready</span>
       </div>
       <div className="w-full h-2 bg-white/10 dark:bg-white/5 rounded-full overflow-hidden p-0.5 border border-white/5">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${percent}%` }}
-          className="h-full bg-gradient-to-r from-blue-400 to-purple-500 dark:from-electric dark:to-purple-500 rounded-full transition-all duration-700 ease-out shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+          className="h-full bg-gradient-to-r from-blue-400 to-indigo-500 dark:from-electric dark:to-blue-500 rounded-full transition-all duration-700 ease-out shadow-[0_0_15px_rgba(59,130,246,0.5)]"
         />
       </div>
     </div>
@@ -317,7 +317,7 @@ const Select = ({ label, options, error, ...props }) => (
 
 const Section = ({ title, children }) => (
   <div className="p-6 rounded-3xl bg-white/5 dark:bg-white-[0.02] border border-white/5 mb-6 hover:bg-white-[0.08] transition-all duration-500">
-    <h3 className="text-[10px] font-black text-purple-300 dark:text-electric uppercase tracking-[0.2em] mb-6 border-b border-white/10 pb-3 italic">{title}</h3>
+    <h3 className="text-[10px] font-black text-blue-300 dark:text-electric uppercase tracking-[0.2em] mb-6 border-b border-white/10 pb-3 italic">{title}</h3>
     {children}
   </div>
 );
@@ -326,7 +326,7 @@ const Primary = ({ children, onClick, disabled }) => (
   <button
     onClick={onClick}
     disabled={disabled}
-    className="px-10 py-4 rounded-2xl font-black uppercase tracking-[0.2em] text-[11px] bg-gradient-to-r from-blue-500 to-purple-500 dark:from-electric dark:to-purple-600 text-white shadow-2xl shadow-blue-500/20 hover:scale-105 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100"
+    className="px-10 py-4 rounded-2xl font-black uppercase tracking-[0.2em] text-[11px] bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-electric dark:to-blue-600 text-white shadow-2xl shadow-blue-500/20 hover:scale-105 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100"
   >
     {children}
   </button>

@@ -13,14 +13,14 @@ export default function ThemeToggle() {
         transition-all duration-300
         ${dark
                     ? "bg-electric/20 border border-electric/40 shadow-electric"
-                    : "bg-purple-100 border border-purple-200"
+                    : "bg-blue-100 border border-blue-200"
                 }
       `}
         >
             {/* Track label icons */}
             <span className="absolute inset-0 flex items-center justify-between px-1.5 pointer-events-none">
                 <Sun size={11} className={`transition-opacity duration-300 ${dark ? "opacity-30 text-white" : "opacity-0"}`} />
-                <Moon size={11} className={`transition-opacity duration-300 ${dark ? "opacity-0" : "opacity-30 text-purple-500"}`} />
+                <Moon size={11} className={`transition-opacity duration-300 ${dark ? "opacity-0" : "opacity-30 text-blue-500"}`} />
             </span>
 
             {/* Thumb */}
@@ -31,7 +31,7 @@ export default function ThemeToggle() {
           transition-all duration-300
           ${dark
                         ? "translate-x-7 bg-electric text-white"
-                        : "translate-x-0 bg-purple-600 text-white"
+                        : "translate-x-0 bg-blue-600 text-white"
                     }
         `}
             >

@@ -150,7 +150,7 @@ export default function ProjectRecommendations() {
             <div className="relative z-10 flex items-center justify-between mb-4">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <MessageSquare size={14} className="text-purple-500 dark:text-electric" />
+                  <MessageSquare size={14} className="text-blue-500 dark:text-electric" />
                   <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">History</span>
                 </div>
                 <h2 className="text-lg font-black italic text-gray-900 dark:text-slate-100 uppercase">Recent Chats</h2>
@@ -204,7 +204,7 @@ export default function ProjectRecommendations() {
             {/* CHAT HEADER */}
             <div className="p-6 border-b border-gray-100 dark:border-white/5 flex items-center justify-between relative z-10 backdrop-blur-md bg-white/50 dark:bg-[#111118]/50">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-electric dark:to-purple-600 rounded-2xl shadow-lg shadow-blue-500/20 dark:shadow-electric/20 animate-glow-pulse">
+                <div className="p-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-electric dark:to-blue-600 rounded-2xl shadow-lg shadow-blue-500/20 dark:shadow-electric/20 animate-glow-pulse">
                   <Bot size={22} className="text-white" />
                 </div>
                 <div>

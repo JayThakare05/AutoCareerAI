@@ -31,16 +31,16 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen transition-colors duration-500 bg-gradient-to-br from-blue-600 via-indigo-500 to-purple-400 dark:from-slate-900 dark:via-black dark:to-slate-900 flex items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen transition-colors duration-500 bg-gradient-to-br from-blue-600 via-indigo-500 to-blue-400 dark:from-slate-900 dark:via-black dark:to-slate-900 flex items-center justify-center p-6 relative overflow-hidden">
 
       {/* Background Decorative Elements */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/20 dark:bg-electric/10 rounded-full blur-[120px] animate-pulse" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-400/20 dark:bg-purple-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-400/20 dark:bg-blue-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
 
       {/* Logo & Theme Toggle */}
       <div className="absolute top-6 left-6 flex items-center gap-4">
         <Link to="/" className="text-white text-2xl font-extrabold tracking-tight drop-shadow-lg hover:scale-105 transition-transform">
-          AUTOCAREER<span className="text-purple-300 dark:text-electric">AI</span>
+          AUTOCAREER<span className="text-blue-300 dark:text-electric">AI</span>
         </Link>
       </div>
       <div className="absolute top-6 right-6">
@@ -99,7 +99,7 @@ export default function Login() {
               onClick={handleLogin}
               disabled={loading}
               className="w-full mt-4 py-4 rounded-2xl font-black uppercase tracking-[0.2em] text-sm text-white
-                         bg-gradient-to-r from-blue-500 to-purple-500 dark:from-electric dark:to-purple-600
+                         bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-electric dark:to-blue-600
                          shadow-lg shadow-blue-500/20 dark:shadow-electric/20
                          hover:scale-[1.05] active:scale-[0.95]
                          transition-all duration-300 relative overflow-hidden group disabled:opacity-50 disabled:hover:scale-100"

@@ -82,7 +82,12 @@ const UserSchema = new mongoose.Schema(
     documents: {
       profilePhoto: String,
       resume: String,
-      certificates: [String],
+      certificates: [
+        {
+          url: String,
+          skills: [String],
+        },
+      ],
     },
     projects: [ProjectSchema],
     role: { type: String, default: "user" },

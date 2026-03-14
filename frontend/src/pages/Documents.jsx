@@ -19,7 +19,7 @@ const openFile = async (path) => {
   try {
     const token = localStorage.getItem("token");
     const res = await fetch(
-      `http://localhost:5000/api/upload/file?filePath=${encodeURIComponent(path)}`,
+          `${import.meta.env.VITE_API_BASE_URL}/upload/file?filePath=${encodeURIComponent(path)}`,
       { headers: { Authorization: token } }
     );
     if (!res.ok) {
@@ -228,9 +228,9 @@ export default function Documents() {
           ...prev,
           certificates: prev.certificates.filter((_, i) => i !== index)
         }));
-        toast.success("Record purged", { id: loadingToast });
+        toast.success("Certificate removed successfully", { id: loadingToast });
     } catch {
-        toast.error("Purge failed. Index might be locked.", { id: loadingToast });
+        toast.error("Certificate removal failed. Index might be locked.", { id: loadingToast });
     }
   };
 
@@ -282,7 +282,7 @@ export default function Documents() {
         {/* HEADER */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-gray-100 dark:border-white/5 animate-slide-up">
           <div className="flex items-center gap-5">
-            <div className="p-4 bg-gradient-to-br from-blue-500 to-indigo-600 dark:from-electric/20 dark:to-purple-900/40 rounded-3xl text-white dark:text-electric shadow-xl shadow-blue-500/10 dark:shadow-electric/20">
+            <div className="p-4 bg-gradient-to-br from-blue-500 to-indigo-600 dark:from-electric/20 dark:to-blue-900/40 rounded-3xl text-white dark:text-electric shadow-xl shadow-blue-500/10 dark:shadow-electric/20">
               <ShieldCheck size={32} />
             </div>
             <div>
@@ -360,7 +360,7 @@ export default function Documents() {
         <section className="animate-slide-up" style={{ animationDelay: '200ms' }}>
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
-              <Layers className="text-purple-400" size={20} />
+              <Layers className="text-blue-400" size={20} />
               <h3 className="text-xl font-black italic text-gray-900 dark:text-slate-100 italic tracking-tighter uppercase">Verified Certificates</h3>
             </div>
             <div className="h-px flex-1 mx-8 bg-gray-100 dark:bg-white/5 hidden md:block" />
@@ -429,7 +429,7 @@ export default function Documents() {
 
           {/* ADD PROJECT FORM */}
           <div className="bg-white dark:bg-[#111118] rounded-[48px] p-10 border border-gray-100 dark:border-[#1e1e30] shadow-sm relative overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent pointer-events-none" />
             <div className="relative z-10 grid md:grid-cols-3 gap-12">
               <div className="md:col-span-1 space-y-6">
                 <div className="p-5 bg-blue-600 dark:bg-electric text-white rounded-[32px] inline-block shadow-xl shadow-blue-500/20">
@@ -496,11 +496,11 @@ export default function Documents() {
         isOpen={confirmModal.isOpen}
         onClose={() => setConfirmModal({ isOpen: false, type: "", data: null })}
         onConfirm={confirmModal.type === "certificate" ? handleConfirmCertDelete : handleConfirmProjectDelete}
-        title={confirmModal.type === "certificate" ? "Purge Certificate?" : "Eliminate Project?"}
+        title={confirmModal.type === "certificate" ? "Delete Certificate?" : "Delete Project?"}
         message={confirmModal.type === "certificate" 
           ? "This will remove the certificate from your professional index and update your skill extraction metrics."
           : "Are you sure you want to remove this project from your profile? This cannot be undone."}
-        confirmText="Confirm Purge"
+        confirmText="Confirm Delete"
       />
     </div>
   );

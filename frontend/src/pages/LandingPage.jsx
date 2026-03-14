@@ -268,7 +268,7 @@ export default function LandingPage() {
             <br className="hidden sm:block" />
             with{" "}
             <span className="relative inline-block">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-violet-400">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-blue-400">
                 Intelligence
               </span>
               <svg className="absolute -bottom-1 left-0 w-full overflow-visible" height="6" viewBox="0 0 100 6" preserveAspectRatio="none">
@@ -322,7 +322,7 @@ export default function LandingPage() {
             transition={{ delay: 0.5, duration: 1, ease: [0.22, 1, 0.36, 1] }}
             className="relative w-full max-w-4xl"
           >
-            <div className="absolute -inset-6 rounded-[48px] bg-gradient-to-br from-blue-600/12 via-indigo-600/8 to-violet-600/12 blur-3xl" />
+            <div className="absolute -inset-6 rounded-[48px] bg-gradient-to-br from-blue-600/12 via-indigo-600/8 to-blue-600/12 blur-3xl" />
 
             <div className="relative grid grid-cols-12 gap-3" style={{ gridTemplateRows: "180px 160px" }}>
 
@@ -351,7 +351,7 @@ export default function LandingPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#0d0d14]/70 via-transparent to-transparent" />
                 <div className="absolute inset-0 flex flex-col justify-end p-5">
-                  <div className="inline-flex w-fit items-center gap-1.5 px-2.5 py-1 rounded-full bg-violet-600/25 border border-violet-500/30 text-[9px] font-black uppercase tracking-[0.15em] text-violet-300 mb-2">
+                  <div className="inline-flex w-fit items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-600/25 border border-blue-500/30 text-[9px] font-black uppercase tracking-[0.15em] text-blue-300 mb-2">
                     <MessageSquare size={8} /> Mock Interviews
                   </div>
                   <p className="text-white font-bold text-sm">Practice. Get feedback. Get hired.</p>
@@ -428,7 +428,7 @@ export default function LandingPage() {
               description="Practice with an adaptive AI interviewer. Receive real-time feedback on your answers, pacing, and clarity."
               delay={0.12}
               image="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?q=80&w=700&auto=format&fit=crop"
-              accent="#8b5cf6"
+              accent="#4f46e5"
             />
             <FeatureCard
               icon={Search}
@@ -497,7 +497,7 @@ export default function LandingPage() {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="relative"
           >
-            <div className="absolute -inset-4 rounded-[44px] bg-gradient-to-br from-blue-600/12 to-violet-600/10 blur-2xl" />
+            <div className="absolute -inset-4 rounded-[44px] bg-gradient-to-br from-blue-600/12 to-indigo-600/10 blur-2xl" />
             <div className="relative rounded-[28px] overflow-hidden border border-white/8">
               <img
                 src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=900&auto=format&fit=crop"
@@ -573,7 +573,7 @@ export default function LandingPage() {
               },
               {
                 icon: Star,
-                color: "#8b5cf6",
+                color: "#6366f1",
                 title: "Shape the Product",
                 desc: "Direct line to the team. Your feedback drives what we build next. This is a platform built with its users.",
               },
@@ -610,7 +610,7 @@ export default function LandingPage() {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="relative rounded-[40px] overflow-hidden p-12 md:p-20 text-center"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-700 via-indigo-700 to-violet-800" />
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-700 via-indigo-700 to-indigo-800" />
             <div className="absolute inset-0 opacity-[0.07]"
               style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")", backgroundSize: "160px" }} />
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60%] h-[60%] bg-white/6 rounded-full blur-[80px]" />

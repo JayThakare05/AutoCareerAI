@@ -15,7 +15,7 @@ const Topbar = ({ user, navigate }) => {
         {/* Welcome */}
         <h2 className="text-base font-semibold text-gray-800 dark:text-slate-100 animate-fade-in">
           Welcome,{" "}
-          <span className="text-purple-600 dark:text-electric font-bold">
+          <span className="text-blue-600 dark:text-electric font-bold">
             {user.firstName}
           </span>{" "}
           👋
@@ -29,7 +29,7 @@ const Topbar = ({ user, navigate }) => {
           <div
             className="
               w-9 h-9 rounded-full cursor-pointer
-              bg-purple-600 dark:bg-electric/20 dark:border dark:border-electric/50
+              bg-blue-600 dark:bg-electric/20 dark:border dark:border-electric/50
               flex items-center justify-center
               text-white dark:text-electric font-bold text-sm
               hover:scale-110 transition-transform duration-200
@@ -38,7 +38,15 @@ const Topbar = ({ user, navigate }) => {
             onClick={() => setOpen(true)}
             title="Account"
           >
-            {user.firstName?.charAt(0)?.toUpperCase()}
+            {(user.profilePhoto || user.documents?.profilePhoto) ? (
+              <img
+                src={user.profilePhoto || user.documents?.profilePhoto}
+                className="w-full h-full rounded-full object-cover"
+                alt="Avatar"
+              />
+            ) : (
+              user.firstName?.charAt(0)?.toUpperCase()
+            )}
           </div>
         </div>
       </div>

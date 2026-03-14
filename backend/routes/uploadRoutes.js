@@ -15,8 +15,11 @@ router.get("/my-documents", auth, getUploadedDocs);
 
 router.get("/file", auth, (req, res) => {
   const filePath = decodeURIComponent(req.query.filePath);
-  console.log(filePath)
-  res.sendFile(require("path").resolve(filePath));
+  //console.log(filePath)
+  if (filePath.startsWith("http")) {
+    return res.redirect(filePath);
+  }
+  res.sendFile(path.resolve(filePath));
 });
 
 module.exports = router;
